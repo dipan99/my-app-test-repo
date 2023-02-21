@@ -1,19 +1,28 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 export default function Navbar(props) {
-    const getNavClassName = () => {
+
+    useEffect(() => {
         if(props.mode==='light'){
-            document.getElementById("MainNav") && document.getElementById("MainNav").removeAttribute("data-bs-theme")
-            return "navbar navbar-expand-lg bg-body-tertiary";
+            setLightModeStyle();
         }else{
-            document.getElementById("MainNav") && document.getElementById("MainNav").setAttribute("data-bs-theme","dark")
-            return "navbar navbar-expand-lg bg-body-tertiary bg-dark";
+            setDarkModeStyle();
         }
+    })
+    const setDarkModeStyle = () => {
+        document.getElementById("MainNav") && document.getElementById("MainNav").setAttribute("data-bs-theme","dark");
+        document.getElementById("MainNav").classList.add('bg-dark');
+        document.getElementById("DarkModeBtn").classList.add('text-light');
+    }
+    const setLightModeStyle = () => {
+        document.getElementById("MainNav") && document.getElementById("MainNav").removeAttribute("data-bs-theme");
+        document.getElementById("MainNav").classList.remove('bg-dark');
+        document.getElementById("DarkModeBtn").classList.remove('text-light');
     }
     return (
-        <nav id="MainNav" className={getNavClassName()}>
+        <nav id="MainNav" className={`navbar navbar-expand-lg bg-body-tertiary`}>
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">{props.title}</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,9 +37,9 @@ export default function Navbar(props) {
                             <Link className="nav-link" to="/about">{props.aboutText}</Link>
                         </li>
                     </ul>
-                    <div className={`form-check form-switch text-${props.mode==='light'?'dark':'light'}`}>
+                    <div id="DarkModeBtn" className={`form-check form-switch`}>
                         <input className="form-check-input" onClick={props.toggleMode} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Enable Dark Mode</label>
+                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">{`${props.mode==='light'?'Enable':'Disable'}`} Dark Mode</label>
                     </div>
                 </div>
             </div>
